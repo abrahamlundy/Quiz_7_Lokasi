@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -157,14 +158,39 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     // Update UI with location data
                     //txtLatitude.setText(String.valueOf(location.getLatitude()));
                     //txtLongitude.setText(String.valueOf(location.getLongitude()));
-                    Toast.makeText(getApplicationContext(),String.valueOf(location.getLatitude()),Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(),String.valueOf(location.getLatitude()),Toast.LENGTH_SHORT).show();
+
+                    double lat = location.getLatitude();
+                    double longi = location.getLongitude();
 
                     Lokasi lokasi =null ;
                     lokasi= new Lokasi();
-                    lokasi.setLatitude(String.valueOf(location.getLatitude()));
-                    lokasi.setLongitude(String.valueOf(location.getLongitude()));
+                    lokasi.setLatitude(String.valueOf(location.getLatitude())+"\nLongitude : "+ String.valueOf(location.getLongitude()));
+                    //lokasi.setLongitude(String.valueOf(location.getLongitude()));
+
+                    //data diupdate diluar interval periodik saat lokasi berubah
+                    //cek apakah ada di dalam gik
+                    // lokasi GIK, kiri atas (utara, barat):     -6.860237, 107.589595
+                    // lokasi GIK, kanan bawah (selatan, timur): -6.860427, 107.590111
+
+                    //Toast.makeText(getApplicationContext(),"Location Changed",Toast.LENGTH_SHORT).show();
+                    if (lat > -6.860427 &&  lat < -6.860237 && longi > 107.589595 && longi <  107.590111 ) {
+                        //Toast.makeText(getApplicationContext(),"Anda di GIK",Toast.LENGTH_SHORT).show();
+                        //-6.861116, -6.862104 , 107.589555, 107.590297
+                        lokasi.setLongitude("Anda Di GIK");
+                    }else if(lat > -6.862104 &&  lat < -6.861116 && longi > 107.589555 && longi <  107.590297 ) {
+                        //AlertDialog ad = new AlertDialog.Builder(getApplicationContext()).create();
+                        //ad.setMessage("Di FPMIPA");
+                        //ad.show();
+                        //Toast.makeText(getApplicationContext(),"Anda di FPMIPA",Toast.LENGTH_SHORT).show();
+                        lokasi.setLongitude("Anda Di FPMIPA");
+                    }
+                    else {
+                        lokasi.setLongitude("Anda Keluar dari lingkungan Fakultas");
+                    }
                     daftarlokasi.add(lokasi);
                     adapter.notifyDataSetChanged();
+
                 }
             }
         };
@@ -180,8 +206,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onLocationChanged(Location location) {
-        //data diupdate diluar interval periodik saat lokasi berubah
-        ambilLokasi();
+        double lat = location.getLatitude();
+        double longi = location.getLongitude();
+
     }
 
     @Override

@@ -34,7 +34,7 @@ public class ListHandler extends RecyclerView.Adapter<ListHandler.CategoryViewHo
             //Untuk membuat kustomisasi Nama dengan penanda nomor. Fungsi holder tidak mendukung concate dua string secara langsung
             String urut = String.valueOf(number)+". Latitude : "+p.getLatitude();
            holder.tvLat.setText(urut);
-           holder.tvLong.setText("Longitude : "+p.getLongitude());
+           holder.tvLong.setText("Posisi : "+p.getLongitude());
         }
         @Override
         public int getItemCount() {
